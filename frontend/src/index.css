@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+/* App colors: olive/army greens + neutral stone. Use as bg-army-700, text-army-900, etc. */
+@theme {
+  --color-army-50: #f4f6f1;
+  --color-army-100: #e5eadc;
+  --color-army-200: #ccd6bb;
+  --color-army-300: #aabb8f;
+  --color-army-400: #899f68;
+  --color-army-500: #6b824c;
+  --color-army-600: #53663a;
+  --color-army-700: #414f30;
+  --color-army-800: #36412a;
+  --color-army-900: #1f2a1f;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body {
+  @apply bg-stone-100 text-stone-800 antialiased;
+}
+
+/* Shared form + button styles, so pages stay short */
+@layer components {
+  .input {
+    @apply w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm
+      transition focus:border-army-500 focus:ring-2 focus:ring-army-200 focus:outline-none
+      disabled:bg-stone-100 disabled:text-stone-500;
+  }
+  .label {
+    @apply mb-1 block text-xs font-medium tracking-wide text-stone-600 uppercase;
+  }
+  .btn-primary,
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium
+      transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply bg-army-700 text-white hover:bg-army-800;
+  }
+  .btn-secondary {
+    @apply border border-stone-300 bg-white text-stone-700 hover:bg-stone-50;
+  }
+  .card {
+    @apply rounded-xl border border-stone-200 bg-white shadow-sm;
+  }
+}
+
+/* Page / modal entry animations */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+.animate-fade-in { animation: fade-in 0.25s ease-out; }
+.animate-pop-in  { animation: pop-in 0.18s ease-out; }

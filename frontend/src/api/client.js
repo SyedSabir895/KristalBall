@@ -40,9 +40,12 @@ api.interceptors.response.use(
   }
 );
 
-// Backend always sends { error: '...' } → show that, else a generic message
+// Our backend sends { error: '...' }. Other servers (e.g. a hosting 404) may send
+// { error: { code, message } } or HTML → always return a plain string, never an object.
 export function errorMessage(err) {
-  return err?.response?.data?.error || err?.message || 'Something went wrong';
+  const data = err?.response?.data;
+  const candidates = [data?.error, data?.error?.message, data?.message, err?.message];
+  return candidates.find((m) => typeof m === 'string' && m) || 'Something went wrong';
 }
 
 export default api;

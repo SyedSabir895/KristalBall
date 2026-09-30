@@ -20,8 +20,14 @@ const app = express();
 if (process.env.TRUST_PROXY === 'true') app.set('trust proxy', 1);
 
 app.use(helmet());
-// Only the frontend URL may call the API from a browser (falls back to open in dev)
-app.use(cors({ origin: process.env.CLIENT_URL || true }));
+// Only the frontend URL(s) may call the API from a browser (falls back to open in dev).
+// CLIENT_URL can be comma-separated; paths are stripped since an origin is scheme + host only.
+const allowedOrigins = (process.env.CLIENT_URL || '')
+  .split(',')
+  .map((u) => u.trim())
+  .filter(Boolean)
+  .map((u) => new URL(u).origin); // 'https://x.vercel.app/login/' → 'https://x.vercel.app'
+app.use(cors({ origin: allowedOrigins.length ? allowedOrigins : true }));
 app.use(express.json({ limit: '100kb' }));
 
 app.get('/api/health', async (req, res) => {

@@ -19,7 +19,6 @@ const defaultFilters = () => ({
 
 const num = (key) => (row) => formatNumber(row[key]);
 
-// Per-equipment breakdown under the cards
 const BREAKDOWN_COLUMNS = [
   { key: 'equipment_name', label: 'Equipment', render: (r) => <span className="font-medium">{r.equipment_name}</span> },
   { key: 'category', label: 'Category', render: (r) => <Badge>{r.category}</Badge> },
@@ -96,10 +95,8 @@ export default function Dashboard() {
   );
 }
 
-// Bonus popup: rows behind the Net Movement figure
 function NetMovementModal({ open, onClose, filters, totals }) {
   const [tab, setTab] = useState('purchases');
-  // Only fetch while open
   const { data, error } = useApi(
     () => (open ? dashboardApi.netMovement(filters) : Promise.resolve(null)),
     `${open}-${JSON.stringify(filters)}`

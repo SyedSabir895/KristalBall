@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 const db = require('./index');
 
 async function seed() {
-  // Wipe data, reset ids
   await db.query(`TRUNCATE audit_logs, expenditures, assignments, transfers, purchases,
                   users, equipment_types, bases RESTART IDENTITY CASCADE`);
 
@@ -24,7 +23,6 @@ async function seed() {
     [hash]
   );
 
-  // Sample movements (created_by = admin, id 1)
   await db.query(`INSERT INTO purchases (base_id, equipment_type_id, quantity, purchase_date, created_by) VALUES
     (1,1,100,'2026-08-01',1), (1,4,5000,'2026-08-05',1), (2,3,10,'2026-08-10',1), (1,1,50,'2026-09-05',1)`);
   await db.query(`INSERT INTO transfers (from_base_id, to_base_id, equipment_type_id, quantity, transfer_date, created_by) VALUES

@@ -1,7 +1,5 @@
 import { Spinner } from './ui';
 
-// columns: [{ key, label, render?: (row) => node, align?: 'right' }]
-// Desktop → normal table. Mobile → one card per row (tables don't fit on phones).
 export default function DataTable({ columns, rows, loading, error, emptyText = 'No records found', onRowClick }) {
   const cell = (row, col) => (col.render ? col.render(row) : row[col.key] ?? '—');
 
@@ -25,7 +23,6 @@ export default function DataTable({ columns, rows, loading, error, emptyText = '
 
   return (
     <div className={`relative transition-opacity ${loading ? 'opacity-60' : ''}`}>
-      {/* Desktop table */}
       <div className="card hidden overflow-x-auto md:block">
         <table className="w-full text-sm">
           <thead>
@@ -51,7 +48,6 @@ export default function DataTable({ columns, rows, loading, error, emptyText = '
         </table>
       </div>
 
-      {/* Mobile cards */}
       <div className="space-y-3 md:hidden">
         {rows.map((row, i) => (
           <div key={row.id ?? i} onClick={() => onRowClick?.(row)} className={`card p-4 ${clickable}`}>

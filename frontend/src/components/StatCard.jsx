@@ -9,7 +9,6 @@ const TONES = {
   stone: 'bg-stone-100 text-stone-700',
 };
 
-// Dashboard metric tile. With onClick it becomes a button (Net Movement → popup).
 export default function StatCard({ label, value, icon: Icon, tone = 'stone', hint, onClick, loading }) {
   const Tag = onClick ? 'button' : 'div';
   return (

@@ -4,12 +4,9 @@ const { logAudit } = require('../utils/audit');
 const { createFilter } = require('../utils/filters');
 const { toPositiveInt, isValidDate } = require('../utils/validate');
 
-// POST /api/purchases
-// Purchases ADD stock, so no stock check needed
 async function createPurchase(req, res) {
   const { base_id, equipment_type_id, quantity, purchase_date, remarks } = req.body;
 
-  // Commander: forced to own base. Others: must send base_id
   const baseId = resolveBaseId(req, base_id);
   const typeId = toPositiveInt(equipment_type_id);
   const qty = toPositiveInt(quantity);
@@ -35,7 +32,6 @@ async function createPurchase(req, res) {
   res.status(201).json(purchase);
 }
 
-// GET /api/purchases?base_id=&equipment_type_id=&category=&start_date=&end_date=
 async function listPurchases(req, res) {
   const { base_id, equipment_type_id, category, start_date, end_date } = req.query;
 

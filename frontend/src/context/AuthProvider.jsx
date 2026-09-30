@@ -5,16 +5,14 @@ import { tokenStore } from '../api/client';
 
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  // Only "loading" if there is a saved token to check
   const [loading, setLoading] = useState(() => Boolean(tokenStore.get()));
 
-  // On page load / refresh: saved token → ask backend who we are
   useEffect(() => {
     if (!tokenStore.get()) return;
     authApi
       .me()
       .then(setUser)
-      .catch(() => tokenStore.clear()) // expired or invalid
+      .catch(() => tokenStore.clear())
       .finally(() => setLoading(false));
   }, []);
 
@@ -23,7 +21,6 @@ export default function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
-  // api/client.js fires this on any 401 → log out everywhere
   useEffect(() => {
     window.addEventListener('auth:logout', logout);
     return () => window.removeEventListener('auth:logout', logout);

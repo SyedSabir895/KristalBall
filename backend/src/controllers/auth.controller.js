@@ -17,9 +17,7 @@ async function login(req, res) {
   );
   const user = rows[0];
 
-  // Same message for wrong email or wrong password: don't reveal which
   if (!user || !(await bcrypt.compare(password, user.password_hash))) {
-    // Record failed attempts too: useful to spot password guessing
     await logAudit(req, 'LOGIN_FAILED', 'users', user?.id ?? null, { email });
     return res.status(401).json({ error: 'Invalid credentials' });
   }
@@ -30,7 +28,7 @@ async function login(req, res) {
     { expiresIn: '8h' }
   );
 
-  req.user = user; // so audit log has user id
+  req.user = user;
   await logAudit(req, 'LOGIN', 'users', user.id, { email });
 
   delete user.password_hash; 

@@ -5,11 +5,9 @@ const { createFilter } = require('../utils/filters');
 const { toPositiveInt, isValidDate } = require('../utils/validate');
 const { withStockCheck } = require('../services/stock.service');
 
-// POST /api/transfers
 async function createTransfer(req, res) {
   const { from_base_id, to_base_id, equipment_type_id, quantity, transfer_date, remarks } = req.body;
 
-  // Commander can only send FROM own base
   const fromBaseId = resolveBaseId(req, from_base_id);
   const toBaseId = toPositiveInt(to_base_id);
   const typeId = toPositiveInt(equipment_type_id);
@@ -26,7 +24,6 @@ async function createTransfer(req, res) {
     return res.status(400).json({ error: 'transfer_date must be YYYY-MM-DD' });
   }
 
-  // Stock leaves the sender base → check sender's stock inside a transaction
   const transfer = await withStockCheck(
     { baseId: fromBaseId, equipmentTypeId: typeId, quantity: qty },
     async (client) => {
@@ -36,7 +33,6 @@ async function createTransfer(req, res) {
          RETURNING *`,
         [fromBaseId, toBaseId, typeId, qty, transfer_date || null, remarks || null, req.user.id]
       );
-      // Audit inside same transaction → transfer and its log commit or roll back together
       await logAudit(req, 'CREATE_TRANSFER', 'transfers', rows[0].id, rows[0], client);
       return rows[0];
     }
@@ -45,7 +41,6 @@ async function createTransfer(req, res) {
   res.status(201).json(transfer);
 }
 
-// GET /api/transfers?base_id=&direction=in|out&equipment_type_id=&category=&start_date=&end_date=
 async function listTransfers(req, res) {
   const { base_id, direction, equipment_type_id, category, start_date, end_date } = req.query;
 
@@ -54,7 +49,7 @@ async function listTransfers(req, res) {
   if (baseId) {
     if (direction === 'in')       f.add('t.to_base_id = ?', baseId);
     else if (direction === 'out') f.add('t.from_base_id = ?', baseId);
-    else                          f.add('(t.from_base_id = ? OR t.to_base_id = ?)', baseId); // both sides
+    else                          f.add('(t.from_base_id = ? OR t.to_base_id = ?)', baseId);
   }
   if (equipment_type_id) f.add('t.equipment_type_id = ?', Number(equipment_type_id));
   if (category)          f.add('e.category = ?', category);

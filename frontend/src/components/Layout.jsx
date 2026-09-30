@@ -9,7 +9,6 @@ import { ROLES, ROLE_LABELS } from '../utils/constants';
 
 const ALL = Object.values(ROLES);
 
-// roles = who sees the menu item (must match App.jsx routes + backend rules)
 const NAV = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, roles: ALL },
   { to: '/purchases', label: 'Purchases', icon: ShoppingCart, roles: ALL },
@@ -20,17 +19,15 @@ const NAV = [
 
 export default function Layout() {
   const { user, logout } = useAuth();
-  const [menuOpen, setMenuOpen] = useState(false); // mobile drawer
+  const [menuOpen, setMenuOpen] = useState(false);
   const items = NAV.filter((n) => n.roles.includes(user.role));
 
   return (
     <div className="min-h-screen">
-      {/* Mobile backdrop */}
       {menuOpen && (
         <div className="animate-fade-in fixed inset-0 z-30 bg-stone-900/40 lg:hidden" onClick={() => setMenuOpen(false)} />
       )}
 
-      {/* Sidebar: always visible on desktop, slides in on mobile */}
       <aside
         className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col bg-army-900 text-army-100 transition-transform duration-300 lg:translate-x-0 ${
           menuOpen ? 'translate-x-0' : '-translate-x-full'
@@ -80,9 +77,7 @@ export default function Layout() {
         </div>
       </aside>
 
-      {/* Main area */}
       <div className="lg:pl-64">
-        {/* Mobile top bar */}
         <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-stone-200 bg-white/90 px-4 py-3 backdrop-blur lg:hidden">
           <button onClick={() => setMenuOpen(true)} aria-label="Open menu" className="rounded-md p-1 hover:bg-stone-100">
             <Menu size={22} />

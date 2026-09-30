@@ -1,9 +1,6 @@
 import { useEffect } from 'react';
 import { AlertCircle, CheckCircle2, Loader2, X } from 'lucide-react';
 
-// Small building blocks used on every page
-
-// App logo (public/icon.png). Round badge, so no background box around it.
 export function Logo({ size = 36, className = '' }) {
   return (
     <img
@@ -60,7 +57,6 @@ export function Alert({ type = 'error', children, onClose }) {
   );
 }
 
-// Label + input wrapper for forms
 export function Field({ label, hint, children }) {
   return (
     <label className="block">
@@ -71,7 +67,6 @@ export function Field({ label, hint, children }) {
   );
 }
 
-// Segmented tab control: tabs = [{ value, label, count? }]
 export function Tabs({ tabs, value, onChange }) {
   return (
     <div className="inline-flex flex-wrap gap-1 rounded-lg bg-stone-200/70 p-1">
@@ -108,7 +103,6 @@ export function Badge({ children, tone = 'stone' }) {
   );
 }
 
-// Overlay dialog. Closes on Esc or backdrop click; locks page scroll while open.
 export function Modal({ open, onClose, title, children, wide = false }) {
   useEffect(() => {
     if (!open) return;

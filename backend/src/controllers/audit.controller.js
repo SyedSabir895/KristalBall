@@ -2,11 +2,9 @@ const db = require('../db');
 const { createFilter } = require('../utils/filters');
 const { toPositiveInt } = require('../utils/validate');
 
-// GET /api/audit-logs?user_id=&action=&entity=&start_date=&end_date=&limit=&offset=
-// Admin only. Paginated because this table grows forever.
 async function listAuditLogs(req, res) {
   const { user_id, action, entity, start_date, end_date } = req.query;
-  const limit = Math.min(toPositiveInt(req.query.limit) || 50, 200); // cap page size
+  const limit = Math.min(toPositiveInt(req.query.limit) || 50, 200);
   const offset = Number(req.query.offset) > 0 ? Number(req.query.offset) : 0;
 
   const f = createFilter();
@@ -14,7 +12,7 @@ async function listAuditLogs(req, res) {
   if (action)     f.add('a.action = ?', action);
   if (entity)     f.add('a.entity = ?', entity);
   if (start_date) f.add('a.created_at >= ?', start_date);
-  if (end_date)   f.add("a.created_at < (?::date + INTERVAL '1 day')", end_date); // include whole end day
+  if (end_date)   f.add("a.created_at < (?::date + INTERVAL '1 day')", end_date);
 
   const countResult = await db.query(`SELECT COUNT(*) FROM audit_logs a ${f.where}`, f.params);
 

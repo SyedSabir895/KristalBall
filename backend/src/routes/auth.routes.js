@@ -3,7 +3,6 @@ const rateLimit = require('express-rate-limit');
 const { login, me } = require('../controllers/auth.controller');
 const { authenticate } = require('../middleware/auth');
 
-// Max 10 login attempts per IP per 15 min → slows down password guessing
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 10,

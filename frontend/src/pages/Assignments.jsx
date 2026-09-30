@@ -14,7 +14,6 @@ const EMPTY_FILTERS = { start_date: '', end_date: '', base_id: '', category: '',
 
 const qty = (r) => `${formatNumber(r.quantity)} ${r.unit}`;
 
-// Everything that differs between the two tabs lives here
 const SECTIONS = {
   assignments: {
     label: 'Assignments',
@@ -67,7 +66,6 @@ export default function Assignments() {
   const { bases, equipmentTypes } = useLookups();
 
   const section = SECTIONS[tab];
-  // personnel filter only exists for assignments
   const params = tab === 'assignments' ? filters : { ...filters, personnel: '' };
   const { data, loading, error, reload } = useApi(() => section.api.list(params), `${tab}-${JSON.stringify(params)}`);
 

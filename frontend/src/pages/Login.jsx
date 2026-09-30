@@ -14,7 +14,6 @@ export default function Login() {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  // Already logged in → skip login page
   if (user) return <Navigate to="/" replace />;
 
   async function onSubmit(e) {
@@ -23,7 +22,7 @@ export default function Login() {
     setError('');
     try {
       await login(email, password);
-      navigate(location.state?.from || '/', { replace: true }); // back to the page they wanted
+      navigate(location.state?.from || '/', { replace: true });
     } catch (err) {
       setError(errorMessage(err));
     } finally {
@@ -55,7 +54,6 @@ export default function Login() {
             Sign in
           </button>
 
-          {/* Quick-fill seeded accounts (for demo / evaluation) */}
           <div className="mt-6 border-t border-stone-200 pt-4">
             <p className="mb-2 text-xs text-stone-500">Demo accounts (password: {DEMO_PASSWORD})</p>
             <div className="flex flex-wrap gap-2">

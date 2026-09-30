@@ -1,6 +1,5 @@
 import api from './client';
 
-// Drop empty filters so the URL stays clean: { base_id: '', category: 'WEAPON' } → { category: 'WEAPON' }
 function clean(params = {}) {
   return Object.fromEntries(
     Object.entries(params).filter(([, v]) => v !== '' && v !== null && v !== undefined)
@@ -10,7 +9,6 @@ function clean(params = {}) {
 const get = (url, params) => api.get(url, { params: clean(params) }).then((r) => r.data);
 const post = (url, body) => api.post(url, body).then((r) => r.data);
 
-// One object per backend resource → pages never write URLs themselves
 export const authApi = {
   login: (email, password) => post('/auth/login', { email, password }),
   me: () => get('/auth/me'),

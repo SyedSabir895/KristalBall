@@ -35,7 +35,6 @@ export default function TransferForm({ bases, equipmentTypes, onSaved, onCancel 
         <ArrowDown size={18} />
       </div>
       <Field label="To base">
-        {/* Can't send to the same base → hide it from the list */}
         <BaseSelect bases={bases} exclude={values.from_base_id} placeholder="Select destination" {...bind('to_base_id')} />
       </Field>
       <Field label="Equipment">

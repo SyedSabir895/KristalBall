@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { errorMessage } from '../api/client';
 
-// Form values + a bind() helper for inputs:
-//   const { values, bind, setValues } = useForm({ quantity: '' });
-//   <input {...bind('quantity')} />
 export function useForm(initial) {
   const [values, setValues] = useState(initial);
   const bind = (name) => ({
@@ -14,8 +11,6 @@ export function useForm(initial) {
   return { values, setValues, bind };
 }
 
-// Wraps a create call with submitting + error state
-//   const { submit, submitting, error } = useSubmit(purchaseApi.create, onSaved);
 export function useSubmit(apiCall, onSuccess) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -27,7 +22,7 @@ export function useSubmit(apiCall, onSuccess) {
       const saved = await apiCall(payload);
       onSuccess?.(saved);
     } catch (err) {
-      setError(errorMessage(err)); // e.g. "Insufficient stock. Available: 20, requested: 50"
+      setError(errorMessage(err));
     } finally {
       setSubmitting(false);
     }

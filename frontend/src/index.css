@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* App colors: olive/army greens + neutral stone. Use as bg-army-700, text-army-900, etc. */
 @theme {
   --color-army-50: #f4f6f1;
   --color-army-100: #e5eadc;
@@ -19,7 +18,6 @@ body {
   @apply bg-stone-100 text-stone-800 antialiased;
 }
 
-/* Shared form + button styles, so pages stay short */
 @layer components {
   .input {
     @apply w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm
@@ -45,7 +43,6 @@ body {
   }
 }
 
-/* Page / modal entry animations */
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: none; }

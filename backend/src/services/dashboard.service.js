@@ -1,9 +1,6 @@
 const db = require('../db');
 const { createFilter } = require('../utils/filters');
 
-// Every stock movement from all 4 tables, flattened into one shape:
-//   base_id | equipment_type_id | d (date) | qty | kind
-// A transfer appears twice: as TRANSFER_OUT for the sender and TRANSFER_IN for the receiver.
 const LEDGER = `
   SELECT base_id, equipment_type_id, purchase_date AS d, quantity AS qty, 'PURCHASE' AS kind FROM purchases
   UNION ALL
@@ -18,13 +15,10 @@ const LEDGER = `
 
 const METRICS = ['opening_balance', 'purchases', 'transfer_in', 'transfer_out', 'assigned', 'expended'];
 
-// Opening   = net of all movements BEFORE start date
-// Net       = purchases + transfer_in − transfer_out   (within range)
-// Closing   = opening + net − assigned − expended
 async function getSummary({ start, end, baseId, typeId, category }) {
   const f = createFilter();
   const s = f.param(start);
-  f.add('l.d <= ?', end); // nothing after the end date matters
+  f.add('l.d <= ?', end);
   if (baseId)   f.add('l.base_id = ?', baseId);
   if (typeId)   f.add('l.equipment_type_id = ?', typeId);
   if (category) f.add('e.category = ?', category);
@@ -47,7 +41,6 @@ async function getSummary({ start, end, baseId, typeId, category }) {
     f.params
   );
 
-  // pg returns SUM as string → convert, then derive net + closing per equipment type
   const byEquipment = rows.map((r) => {
     const row = { ...r };
     for (const m of METRICS) row[m] = Number(r[m]);
@@ -56,7 +49,6 @@ async function getSummary({ start, end, baseId, typeId, category }) {
     return row;
   });
 
-  // Grand totals across all equipment rows
   const totals = {};
   for (const m of [...METRICS, 'net_movement', 'closing_balance']) {
     totals[m] = byEquipment.reduce((sum, r) => sum + r[m], 0);
@@ -65,7 +57,6 @@ async function getSummary({ start, end, baseId, typeId, category }) {
   return { totals, by_equipment: byEquipment };
 }
 
-// Date / type / category conditions shared by the detail queries
 function addCommonFilters(f, dateCol, { start, end, typeId, category }) {
   f.add(`${dateCol} >= ?`, start);
   f.add(`${dateCol} <= ?`, end);
@@ -73,11 +64,9 @@ function addCommonFilters(f, dateCol, { start, end, typeId, category }) {
   if (category) f.add('e.category = ?', category);
 }
 
-// Rows behind the Net Movement number (for the dashboard popup)
 async function getNetMovementDetails(filters) {
   const { baseId } = filters;
 
-  // Purchases
   const pf = createFilter();
   addCommonFilters(pf, 'p.purchase_date', filters);
   if (baseId) pf.add('p.base_id = ?', baseId);
@@ -92,7 +81,6 @@ async function getNetMovementDetails(filters) {
     pf.params
   );
 
-  // Transfers, filtered by receiving side ('in') or sending side ('out')
   const transferQuery = (side) => {
     const tf = createFilter();
     addCommonFilters(tf, 't.transfer_date', filters);
@@ -111,7 +99,6 @@ async function getNetMovementDetails(filters) {
     );
   };
 
-  // 3 independent queries → run in parallel
   const [purchases, transfersIn, transfersOut] = await Promise.all([
     purchasesQuery,
     transferQuery('in'),

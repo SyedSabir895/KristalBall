@@ -5,8 +5,6 @@ const { createFilter } = require('../utils/filters');
 const { toPositiveInt, isValidDate } = require('../utils/validate');
 const { withStockCheck } = require('../services/stock.service');
 
-// POST /api/assignments
-// Assigning to personnel takes stock out of the base's available pool
 async function createAssignment(req, res) {
   const { base_id, equipment_type_id, quantity, personnel_name, personnel_id, assignment_date } = req.body;
 
@@ -40,7 +38,6 @@ async function createAssignment(req, res) {
   res.status(201).json(assignment);
 }
 
-// GET /api/assignments?base_id=&equipment_type_id=&category=&personnel=&start_date=&end_date=
 async function listAssignments(req, res) {
   const { base_id, equipment_type_id, category, personnel, start_date, end_date } = req.query;
 
@@ -49,7 +46,7 @@ async function listAssignments(req, res) {
   if (baseId)            f.add('a.base_id = ?', baseId);
   if (equipment_type_id) f.add('a.equipment_type_id = ?', Number(equipment_type_id));
   if (category)          f.add('e.category = ?', category);
-  if (personnel)         f.add('(a.personnel_name ILIKE ? OR a.personnel_id ILIKE ?)', `%${personnel}%`); // partial, case-insensitive
+  if (personnel)         f.add('(a.personnel_name ILIKE ? OR a.personnel_id ILIKE ?)', `%${personnel}%`);
   if (start_date)        f.add('a.assignment_date >= ?', start_date);
   if (end_date)          f.add('a.assignment_date <= ?', end_date);
 

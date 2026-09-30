@@ -2,9 +2,6 @@ import { RotateCcw } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { CATEGORIES } from '../utils/constants';
 
-// Shared filter row: date range, base, category, equipment type.
-// value = { start_date, end_date, base_id, category, equipment_type_id }
-// show  = which filters to render, e.g. ['dates', 'base', 'category', 'equipment']
 export default function FilterBar({
   value,
   onChange,
@@ -18,7 +15,6 @@ export default function FilterBar({
   const isCommander = user?.role === 'BASE_COMMANDER';
   const set = (key) => (e) => onChange({ ...value, [key]: e.target.value });
 
-  // Picking a category narrows the equipment list; clear equipment if it no longer fits
   const types = value.category ? equipmentTypes.filter((t) => t.category === value.category) : equipmentTypes;
   const setCategory = (e) => {
     const category = e.target.value;
@@ -47,7 +43,6 @@ export default function FilterBar({
         <label className="block">
           <span className="label">Base</span>
           {isCommander ? (
-            // Commander is always scoped to own base (backend enforces this too)
             <select className="input" disabled value="own">
               <option value="own">{user.base_name}</option>
             </select>

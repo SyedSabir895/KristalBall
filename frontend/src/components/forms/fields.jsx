@@ -3,7 +3,6 @@ import { lookupApi } from '../../api/services';
 import { formatNumber } from '../../utils/format';
 import { Spinner } from '../ui';
 
-// Base dropdown. locked = commander (always own base, cannot change)
 export function BaseSelect({ bases, locked, exclude, placeholder = 'Select base', ...props }) {
   return (
     <select className="input" required disabled={locked} {...props}>
@@ -17,7 +16,6 @@ export function BaseSelect({ bases, locked, exclude, placeholder = 'Select base'
   );
 }
 
-// Equipment dropdown grouped by category
 export function EquipmentSelect({ equipmentTypes, ...props }) {
   const groups = equipmentTypes.reduce((acc, t) => {
     (acc[t.category] ??= []).push(t);
@@ -37,8 +35,6 @@ export function EquipmentSelect({ equipmentTypes, ...props }) {
   );
 }
 
-// "Available: 120 units" under a quantity field. Red when asking for more than available.
-// Just a helpful preview; the backend does the real check inside a transaction.
 export function StockHint({ baseId, equipmentTypeId, quantity, unit }) {
   const ready = Boolean(baseId && equipmentTypeId);
   const { data, loading } = useApi(

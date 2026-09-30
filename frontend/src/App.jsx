@@ -10,13 +10,11 @@ import AuditLogs from './pages/AuditLogs';
 import NotFound from './pages/NotFound';
 import { ROLES } from './utils/constants';
 
-// Route access mirrors the backend rules (backend is still the real gatekeeper)
 export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
 
-      {/* Any logged-in user */}
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
           <Route index element={<Dashboard />} />

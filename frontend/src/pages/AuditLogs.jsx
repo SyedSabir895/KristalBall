@@ -38,7 +38,6 @@ export default function AuditLogs() {
   const params = { ...filters, limit: PAGE_SIZE, offset: page * PAGE_SIZE };
   const { data, loading, error } = useApi(() => auditApi.list(params), JSON.stringify(params));
 
-  // Changing a filter → back to page 1
   const setFilter = (key) => (e) => {
     setFilters({ ...filters, [key]: e.target.value });
     setPage(0);

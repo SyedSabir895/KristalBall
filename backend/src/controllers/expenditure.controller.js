@@ -5,8 +5,6 @@ const { createFilter } = require('../utils/filters');
 const { toPositiveInt, isValidDate } = require('../utils/validate');
 const { withStockCheck } = require('../services/stock.service');
 
-// POST /api/expenditures
-// Expended = used up / destroyed (ammo fired, vehicle written off) → stock goes down
 async function createExpenditure(req, res) {
   const { base_id, equipment_type_id, quantity, reason, expenditure_date } = req.body;
 
@@ -40,7 +38,6 @@ async function createExpenditure(req, res) {
   res.status(201).json(expenditure);
 }
 
-// GET /api/expenditures?base_id=&equipment_type_id=&category=&start_date=&end_date=
 async function listExpenditures(req, res) {
   const { base_id, equipment_type_id, category, start_date, end_date } = req.query;
 

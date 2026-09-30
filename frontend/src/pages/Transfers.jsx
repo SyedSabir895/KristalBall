@@ -20,7 +20,6 @@ export default function Transfers() {
   const { bases, equipmentTypes } = useLookups();
   const { data, loading, error, reload } = useApi(() => transferApi.list(filters), JSON.stringify(filters));
 
-  // Direction only makes sense relative to one base
   const myBaseId = user.role === 'BASE_COMMANDER' ? user.base_id : filters.base_id;
 
   const columns = [

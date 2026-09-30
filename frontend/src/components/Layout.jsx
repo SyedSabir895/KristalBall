@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import {
-  ArrowLeftRight, LayoutDashboard, LogOut, Menu, ScrollText, Shield, ShoppingCart, UserCheck, X,
+  ArrowLeftRight, LayoutDashboard, LogOut, Menu, ScrollText, ShoppingCart, UserCheck, X,
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { Logo } from './ui';
 import { ROLES, ROLE_LABELS } from '../utils/constants';
 
 const ALL = Object.values(ROLES);
@@ -37,7 +38,7 @@ export default function Layout() {
       >
         <div className="flex items-center justify-between px-5 py-5">
           <div className="flex items-center gap-2">
-            <span className="rounded-lg bg-army-600 p-1.5 text-white"><Shield size={20} /></span>
+            <Logo size={38} />
             <div>
               <div className="font-semibold text-white">KristalBall</div>
               <div className="text-xs text-army-300">Asset Management</div>
@@ -86,6 +87,7 @@ export default function Layout() {
           <button onClick={() => setMenuOpen(true)} aria-label="Open menu" className="rounded-md p-1 hover:bg-stone-100">
             <Menu size={22} />
           </button>
+          <Logo size={28} />
           <span className="font-semibold text-army-900">KristalBall</span>
         </header>
 

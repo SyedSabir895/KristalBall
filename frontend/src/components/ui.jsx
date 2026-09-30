@@ -3,6 +3,19 @@ import { AlertCircle, CheckCircle2, Loader2, X } from 'lucide-react';
 
 // Small building blocks used on every page
 
+// App logo (public/icon.png). Round badge, so no background box around it.
+export function Logo({ size = 36, className = '' }) {
+  return (
+    <img
+      src="/icon.png"
+      alt="KristalBall logo"
+      width={size}
+      height={size}
+      className={`shrink-0 rounded-full shadow-sm ${className}`}
+    />
+  );
+}
+
 export function Spinner({ className = '' }) {
   return <Loader2 className={`animate-spin text-army-600 ${className}`} size={20} />;
 }

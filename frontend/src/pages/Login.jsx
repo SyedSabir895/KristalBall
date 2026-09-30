@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { Shield } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { errorMessage } from '../api/client';
-import { Alert, Spinner } from '../components/ui';
+import { Alert, Logo, Spinner } from '../components/ui';
 import { DEMO_ACCOUNTS, DEMO_PASSWORD } from '../utils/constants';
 
 export default function Login() {
@@ -36,7 +35,7 @@ export default function Login() {
     <div className="flex min-h-screen items-center justify-center bg-army-900 px-4 py-10">
       <div className="animate-pop-in w-full max-w-sm">
         <div className="mb-8 text-center text-white">
-          <span className="mb-3 inline-flex rounded-xl bg-army-600 p-3"><Shield size={28} /></span>
+          <Logo size={72} className="mx-auto mb-3" />
           <h1 className="text-2xl font-semibold">KristalBall</h1>
           <p className="text-sm text-army-300">Military Asset Management System</p>
         </div>
